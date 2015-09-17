@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: a6e986a78a9f1244e9852f453c828438
-timeCreated: 1441803690
+timeCreated: 1442487614
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -59,8 +59,8 @@ TextureImporter:
         y: 0
         width: 365
         height: 250
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      alignment: 9
+      pivot: {x: .602993548, y: .688763082}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: Propellianimaatio_1
       rect:
@@ -70,7 +70,7 @@ TextureImporter:
         width: 365
         height: 250
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: Propellianimaatio_2
       rect:
@@ -80,7 +80,7 @@ TextureImporter:
         width: 365
         height: 250
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
   spritePackingTag: 
   userData: 

@@ -6,6 +6,7 @@ public class PlaneController : MonoBehaviour {
     public float maxForce;
     public float resistPerVelocity;
     public float forcePerSec;
+    public float rotPerSec;
     public float maxSpeed;
     public float lift;
     float liftRatio;
@@ -15,6 +16,8 @@ public class PlaneController : MonoBehaviour {
     bool inControl;
     bool throttleUp;
     bool throttleDown;
+    bool yawUp;
+    bool yawDown;
     
     Rigidbody2D rigidBody2D;
 
@@ -28,11 +31,16 @@ public class PlaneController : MonoBehaviour {
 	void Update ()
     {
         //Movement
-        GetInput();
+        GetInput();        
+    }
+
+    void FixedUpdate()
+    {
         Move();
         rigidBody2D.AddForce(transform.up * 10);
         Debug.Log("velocity: " + rigidBody2D.velocity.magnitude);
-        Debug.Log("force: " + force);
+        //Debug.Log("force: " + force);
+        //Debug.Log(rigidBody2D.rotation);
     }
 
     void GetInput()
@@ -54,10 +62,25 @@ public class PlaneController : MonoBehaviour {
         }
         //Get yaw
         yaw = Input.GetAxis("Yaw");
+
+        if (yaw > 0)
+        {
+            yawUp = true;
+        }
+        else if (yaw < 0)
+        {
+            yawDown = true;
+        }
+        else if (yaw == 0)
+        {
+            yawUp = false;
+            yawDown = false;
+        }
     }
 
     void Move()
     {
+        //Force
         if (throttleUp)
         {
             force += forcePerSec * Time.deltaTime;
@@ -75,6 +98,18 @@ public class PlaneController : MonoBehaviour {
             }
         }
 
+        //Rotation
+        if (yawUp)
+        {
+            //rigidBody2D.rotation += rotPerSec * Time.deltaTime;
+            rigidBody2D.AddTorque(rotPerSec * Time.deltaTime, ForceMode2D.Impulse);
+        }
+        else if (yawDown)
+        {
+            //rigidBody2D.rotation -= rotPerSec * Time.deltaTime;
+            rigidBody2D.AddTorque(-rotPerSec * Time.deltaTime, ForceMode2D.Impulse);
+        }
+
         /*if(rigidBody2D.velocity.magnitude > maxSpeed)
         {
             Vector2 newSpeed = rigidBody2D.velocity;
@@ -90,8 +125,8 @@ public class PlaneController : MonoBehaviour {
         resistVector.Normalize();
         rigidBody2D.AddForce(resistVector * (resistPerVelocity * rigidBody2D.velocity.magnitude));
         //Lift
-        liftRatio = rigidBody2D.velocity.x / rigidBody2D.velocity.magnitude;
+        liftRatio = (rigidBody2D.velocity.x / rigidBody2D.velocity.magnitude) * (rigidBody2D.velocity.magnitude / 21.5f);
         //Debug.Log(liftRatio);
-        //rigidBody2D.AddForce(transform.up * (lift * liftRatio));
+        rigidBody2D.AddForce(transform.up * (lift * liftRatio));
     }
 }
