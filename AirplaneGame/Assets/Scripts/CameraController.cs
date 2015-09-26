@@ -3,8 +3,8 @@ using System.Collections;
 
 public class CameraController : MonoBehaviour {
 
-	GameObject player;
-	PlayerController playerController;
+	public GameObject player;
+	PlaneController playerController;
 	Vector3 playerPos;
 	Vector3 playerDir;
 	Vector3 oldPos;
@@ -17,8 +17,7 @@ public class CameraController : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		player = GameObject.Find ("kone2");
-		playerController = player.GetComponent<PlayerController>();
+		playerController = player.GetComponent<PlaneController>();
 		viewportWidth = (float)(Camera.main.orthographicSize * 2.0 * Screen.width / Screen.height);
 		viewportHeight = (float)(Camera.main.orthographicSize * Screen.width / Screen.height);
 	}
@@ -53,7 +52,7 @@ public class CameraController : MonoBehaviour {
 	float AdjustYPos()
 	{
 		float yPos = 0f;
-		playerDir = playerController.direction;
+        playerDir = playerController.transform.right;
 		playerAngle = Vector3.Angle (angleVector, playerDir);
 		if(playerAngle > 45)
 		{
