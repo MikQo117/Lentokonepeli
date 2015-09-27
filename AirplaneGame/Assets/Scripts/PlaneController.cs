@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class PlaneController : MonoBehaviour {
+public class PlaneController : MonoBehaviour
+{
 
     public float maxForce;
     public float resistPerVelocity;
@@ -18,29 +19,29 @@ public class PlaneController : MonoBehaviour {
     bool throttleDown;
     bool yawUp;
     bool yawDown;
-    
+
     Rigidbody2D rigidBody2D;
 
-	// Use this for initialization
-	void Start ()
+    // Use this for initialization
+    void Start()
     {
         rigidBody2D = GetComponent<Rigidbody2D>();
-	}
-	
-	// Update is called once per frame
-	void Update ()
+    }
+
+    // Update is called once per frame
+    void Update()
     {
         //Movement
-        GetInput();        
+        GetInput();
     }
 
     void FixedUpdate()
     {
         Move();
         rigidBody2D.AddForce(transform.up * 10);
-        /*Debug.Log("velocity: " + rigidBody2D.velocity.magnitude);
-        Debug.Log("force: " + force);*/
-        Debug.Log(rigidBody2D.rotation);
+        //Debug.Log("velocity: " + rigidBody2D.velocity.magnitude);
+        //Debug.Log("force: " + force);
+        //Debug.Log(rigidBody2D.rotation);
     }
 
     void GetInput()
@@ -101,11 +102,13 @@ public class PlaneController : MonoBehaviour {
         //Rotation
         if (yawUp)
         {
-            rigidBody2D.rotation += rotPerSec * Time.deltaTime;
+            //rigidBody2D.rotation += rotPerSec * Time.deltaTime;
+            rigidBody2D.AddTorque(rotPerSec * Time.deltaTime, ForceMode2D.Impulse);
         }
         else if (yawDown)
         {
-            rigidBody2D.rotation -= rotPerSec * Time.deltaTime;
+            //rigidBody2D.rotation -= rotPerSec * Time.deltaTime;
+            rigidBody2D.AddTorque(-rotPerSec * Time.deltaTime, ForceMode2D.Impulse);
         }
 
         /*if(rigidBody2D.velocity.magnitude > maxSpeed)
@@ -117,14 +120,20 @@ public class PlaneController : MonoBehaviour {
         }*/
 
         //Forward force
-        rigidBody2D.AddForce(transform.right * force);
+        if (force > 0)
+        {
+            rigidBody2D.AddForce(transform.right * force);
+        }
         //Air resistance
         Vector2 resistVector = -rigidBody2D.velocity;
         resistVector.Normalize();
         rigidBody2D.AddForce(resistVector * (resistPerVelocity * rigidBody2D.velocity.magnitude));
         //Lift
-        liftRatio = rigidBody2D.velocity.x / rigidBody2D.velocity.magnitude;
-        //Debug.Log(liftRatio);
-        rigidBody2D.AddForce(transform.up * (lift * liftRatio));
+        if (rigidBody2D.velocity.magnitude != 0)
+        {
+            liftRatio = Mathf.Abs((rigidBody2D.velocity.x / rigidBody2D.velocity.magnitude) * (rigidBody2D.velocity.magnitude / maxSpeed));
+            Debug.Log(liftRatio);
+            rigidBody2D.AddForce(transform.up * (lift * liftRatio));
+        }
     }
 }
