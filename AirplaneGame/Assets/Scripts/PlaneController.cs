@@ -125,6 +125,6 @@ public class PlaneController : MonoBehaviour {
         //Lift
         liftRatio = rigidBody2D.velocity.x / rigidBody2D.velocity.magnitude;
         //Debug.Log(liftRatio);
-        //rigidBody2D.AddForce(transform.up * (lift * liftRatio));
+        rigidBody2D.AddForce(transform.up * (lift * liftRatio));
     }
 }
