@@ -103,13 +103,18 @@ public class PlaneController : MonoBehaviour
         if (yawUp)
         {
             //rigidBody2D.rotation += rotPerSec * Time.deltaTime;
-            rigidBody2D.AddTorque(rotPerSec * Time.deltaTime, ForceMode2D.Impulse);
+            float speedRatio = Mathf.Clamp(rigidBody2D.velocity.magnitude / maxSpeed, 0f, 1f);
+            Debug.Log(speedRatio);
+            rigidBody2D.AddTorque((rotPerSec * Time.deltaTime) * speedRatio, ForceMode2D.Impulse);
         }
         else if (yawDown)
         {
             //rigidBody2D.rotation -= rotPerSec * Time.deltaTime;
-            rigidBody2D.AddTorque(-rotPerSec * Time.deltaTime, ForceMode2D.Impulse);
+            float speedRatio = Mathf.Clamp(rigidBody2D.velocity.magnitude / maxSpeed, 0f, 1f);
+            Debug.Log(speedRatio);
+            rigidBody2D.AddTorque((-rotPerSec * Time.deltaTime) * speedRatio, ForceMode2D.Impulse);
         }
+
 
         /*if(rigidBody2D.velocity.magnitude > maxSpeed)
         {
@@ -132,7 +137,7 @@ public class PlaneController : MonoBehaviour
         if (rigidBody2D.velocity.magnitude != 0)
         {
             liftRatio = Mathf.Abs((rigidBody2D.velocity.x / rigidBody2D.velocity.magnitude) * (rigidBody2D.velocity.magnitude / maxSpeed));
-            Debug.Log(liftRatio);
+            //Debug.Log(liftRatio);
             rigidBody2D.AddForce(transform.up * (lift * liftRatio));
         }
     }
